@@ -20,6 +20,47 @@
       "problemMatcher": [],
       "label": "npm: build: vscode-ide-companion",
       "detail": "npm run build -w packages/vscode-ide-companion"
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build",
+      "platform": "node",
+      "dockerBuild": {
+        "dockerfile": "${workspaceFolder}/packages/vscode-ide-companion/Dockerfile",
+        "context": "${workspaceFolder}/packages/vscode-ide-companion",
+        "pull": true
+      },
+      "node": {
+        "package": "${workspaceFolder}/packages/vscode-ide-companion/package.json"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: release",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "platform": "node",
+      "node": {
+        "package": "${workspaceFolder}/packages/vscode-ide-companion/package.json"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: debug",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "dockerRun": {
+        "env": {
+          "DEBUG": "*",
+          "NODE_ENV": "development"
+        }
+      },
+      "node": {
+        "package": "${workspaceFolder}/packages/vscode-ide-companion/package.json",
+        "enableDebugging": true
+      }
     }
   ]
 }
